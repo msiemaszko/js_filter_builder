@@ -25,6 +25,7 @@
                 <th>value_2</th>
             </tr>
         <?php
+            if ($_POST)
             for ($i = 0; $i <= (count($_POST["column"])-1); $i++ ) {
                 echo "
                 <tr>

@@ -122,7 +122,6 @@ createNewElement = function(type = "text", data = [], operator = ""){
                 x.text = data[elem];
                 selectID.appendChild( x );
             }
-
             return selectID; 
         
 
@@ -161,7 +160,6 @@ changeSelect = function(event)
         // change select with type opertor
         case "operator":
             operatorValue = elem.value;
-            
             clearCell(cell_3th);
             
             // value 1:
@@ -184,7 +182,7 @@ changeSelect = function(event)
     } // end switch
 }
 
-// dla podanej komorki cell czysci jej dzieci 0-2
+// dla komorki cell usuń wszystkie dzieci
 clearCell = function (cell){
     while (cell.firstChild) {
         cell.removeChild(cell.firstChild);
@@ -202,3 +200,4 @@ deleteTableRow = function(event) {
 // event listenery
 tableRef.addEventListener("change", changeSelect);
 tableRef.addEventListener("click", deleteTableRow);
+window.addEventListener("load", addNewRow);
