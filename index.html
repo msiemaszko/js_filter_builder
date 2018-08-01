@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="author" content="Marek Siemaszko">
+    <meta name="description" content="budowanie filtrów w js">
+    <title>JS Filter Builders</title>
+    <link rel="stylesheet" href="style/style.css">
+</head>
+<body><center style="margin-top: 50px;">
+
+    <div id="searchTable">
+        <form method="POST" action="result.php">
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Kolumna</th>
+                        <th>Operator</th>
+                        <th>Wyrażenie</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- <tr>
+                        <td>kraj</td> 
+                        <td>=</td> 
+                        <td>Polska</td> 
+                    </tr> -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <input class="icon btnAddRow" type="button" onclick="addNewRow()" value="dodaj warunek">
+                            <input class="icon btnAccept" type="button" onclick="confirmFilter()" value="zatwierdz">
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </form>        
+    </div>
+
+</center></body>
+</html>
+        
+<script>
+
+    var datalist_skrytki = {
+        "domyslny": [
+            "Wysłane",
+            "Odebrane"
+        ],
+        "egzadm": [
+            "Wysłane",
+            "Odebrane"
+        ]
+    };
+
+    var datalist_typ = [
+        "TW-1",
+        "ADN",
+        "Pismo Ogóle"
+    ];
+
+    var operatorsList = {
+        "gt"  : ">",
+        "le"  : "<",
+        "eq"  : "=",
+        "btw" : "between",
+        "lke" : "like"
+    };
+
+    var selectData = {
+        "skrytka" : {
+            "text"      : "Skrytka",
+            "type"      : "skrytkaList",
+            "operators" : ["eq"],
+            "data"      : datalist_skrytki
+        },
+        "send_date" : {
+            "text"      : "Data wysyłki",
+            "type"      : "date",
+            "operators" : ["eq", "gt", "le", "btw"]
+        },
+        "typ": {
+            "text"      : "Typ pisma",
+            "type"      : "list",
+            "operators" : ["eq", "lke"],
+            "data"      : datalist_typ
+        },
+        "tytul": {
+            "text"  : "Tytuł",
+            "type"  : "text",
+            "operators" : ["eq", "lke"]
+        }
+    };
+</script>
+
+<script type="text/javascript" src="js/filer_builders.js"></script>

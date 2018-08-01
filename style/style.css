@@ -1,0 +1,67 @@
+.icon:hover {
+    cursor: pointer;
+}
+
+#searchTable {
+    width: 460px;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 2px;
+}
+
+#searchTable table {
+    width: 100%;
+    font-family: Helvetica;
+    font-size: 12px;
+    border-collapse: collapse;
+}
+
+#searchTable table thead tr th { border-bottom: 1px solid gray;  padding-bottom: 5px;}
+#searchTable table tr th:nth-child(1) { width: 10px }
+#searchTable table tr th:nth-child(2) { width: 35% }
+#searchTable table tr th:nth-child(3) { width: 20% }
+#searchTable table tr td { text-align: center; padding: 5px 0px 5px 0px; }
+
+#searchTable table input, #searchTable table select, #searchTable table option {
+    width: 90%;
+    height: 23px;
+    margin: 2px auto;
+    
+    text-align: center;
+    font-family: Helvetica;
+    font-size: 12px;
+    border: 1px solid gray;
+    border-radius: 2px;
+    vertical-align: middle;
+}
+
+#searchTable .btnAddRow, #searchTable .btnDelete, #searchTable .btnAccept {
+    margin: 5px;
+    height: 20px;
+    border: 1px solid grey;
+    border-radius: 2px;
+}
+
+#searchTable .btnAccept {
+    width: auto;
+    padding-left: 21px;
+    background: url(../img/ico_accept.png) no-repeat 2px center;
+    border-color: white;
+}
+
+#searchTable .btnAddRow {
+    width: auto;
+    padding-left: 21px;
+    background: url(../img/ico_add.png) no-repeat 2px center;
+    border-color: white;
+}
+    #searchTable .btnAddRow:hover, 
+    #searchTable .btnAccept:hover {
+        border-color: gray;
+    }
+
+#searchTable .btnDelete {
+    display: block;
+    width: 20px;
+    background: url(../img/ico_delete.png) no-repeat 2px center;
+}
