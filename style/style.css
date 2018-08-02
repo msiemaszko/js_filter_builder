@@ -2,21 +2,28 @@
     cursor: pointer;
 }
 
-#searchTable {
+#filterTable {
     width: 460px;
-    border: 1px solid #99bbe8;
-    border-radius: 2px;
 }
 
-#searchTable table {
+#filterTable p {
+    text-align: left;
+    font-size: 30pt;
+    margin: 10px 0px;
+    font-family: Helvetica;
+}
+
+#filterTable table {
     width: 100%;
     font-family: Helvetica;
     font-size: 13px;
     border-collapse: collapse;
+    border: 1px solid #99bbe8;
+    border-radius: 2px;
 }
 
 /* wiersz nagłowka */
-#searchTable table thead tr th {
+#filterTable table thead tr th {
     padding: 5px; 
     color: #15428b;
     border-bottom: 1px solid gray;  
@@ -24,18 +31,18 @@
 }
 
 /* wiersz stopki */
-#searchTable table tfoot tr td { 
+#filterTable table tfoot tr td { 
     text-align: left;
     padding: 5px; 
     /* background-color: rgb(208, 222, 240); */
 }
 
-#searchTable table tr th:nth-child(1) { width: 10px }
-#searchTable table tr th:nth-child(2) { width: 35% }
-#searchTable table tr th:nth-child(3) { width: 20% }
-#searchTable table tr td { text-align: center; padding: 5px 0px 5px 0px; }
+#filterTable table tr th:nth-child(1) { width: 10px }
+#filterTable table tr th:nth-child(2) { width: 35% }
+#filterTable table tr th:nth-child(3) { width: 20% }
+#filterTable table tr td { text-align: center; padding: 5px 0px 5px 0px; }
 
-#searchTable table input, #searchTable table select, #searchTable table option {
+#filterTable table input, #filterTable table select, #filterTable table option {
     width: 90%;
     height: 23px;
     margin: 2px auto;
@@ -48,32 +55,32 @@
     vertical-align: middle;
 }
 
-#searchTable .btnAddRow, #searchTable .btnDelete, #searchTable .btnAccept {
+#filterTable .btnAddRow, #filterTable .btnDelete, #filterTable .btnAccept {
     margin: 0px 5px;
     height: 20px;
     border: 1px solid grey;
     border-radius: 2px;
 }
 
-#searchTable .btnAccept {
+#filterTable .btnAccept {
     width: auto;
     padding-left: 21px;
     background: white url(../img/ico_accept.png) no-repeat 2px center;
     border-color: white;
 }
 
-#searchTable .btnAddRow {
+#filterTable .btnAddRow {
     width: auto;
     padding-left: 21px;
     background: white url(../img/ico_add.png) no-repeat 2px center;
     border-color: white;
 }
-    #searchTable .btnAddRow:hover, 
-    #searchTable .btnAccept:hover {
+    #filterTable .btnAddRow:hover, 
+    #filterTable .btnAccept:hover {
         border-color: gray;
     }
 
-#searchTable .btnDelete {
+#filterTable .btnDelete {
     display: block;
     width: 20px;
     background: url(../img/ico_delete.png) no-repeat 2px center;

@@ -11,7 +11,8 @@
 </head>
 <body><center style="margin-top: 50px;">
 
-    <div id="searchTable">
+    <div id="filterTable">
+        <p>JS Filter Builder</p>
         <form method="POST" action="result.php">
             <table>
                 <thead>
@@ -43,10 +44,11 @@
 
 </center></body>
 </html>
-        
+    
+<!-- input data -->
 <script>
-
-    var datalist_skrytki = {
+    // values for the column `skrytka`
+        datalist_skrytki = {
         "domyslny": [
             "Wysłane",
             "Odebrane"
@@ -57,12 +59,15 @@
         ]
     };
 
-    var datalist_typ = [
+    // values for the column `typ`
+    datalist_typ = [
         "TW-1",
         "ADN",
         "Pismo Ogóle"
     ];
 
+
+    // definition of operators
     var operatorsList = {
         "gt"  : ">",
         "le"  : "<",
@@ -71,6 +76,7 @@
         "lke" : "like"
     };
 
+    // definition of columns, allowed operators and value types
     var selectData = {
         "skrytka" : {
             "text"      : "Skrytka",
@@ -97,4 +103,5 @@
     };
 </script>
 
+<!-- loading the script -->
 <script type="text/javascript" src="js/filer_builders.js"></script>

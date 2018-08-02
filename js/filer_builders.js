@@ -1,8 +1,8 @@
-// var tableRef = document.getElementById('searchTable').getElementsByTagName('tbody')[0];
-// var formRef = document.getElementById('searchTable').getElementsByTagName('form')[0];
+// var tableRef = document.getElementById('filterTable').getElementsByTagName('tbody')[0];
+// var formRef = document.getElementById('filterTable').getElementsByTagName('form')[0];
 
-var tableRef = document.querySelector("#searchTable tbody");
-var formRef = document.querySelector("#searchTable form");
+var tableRef = document.querySelector("#filterTable tbody");
+var formRef = document.querySelector("#filterTable form");
 
 
 confirmFilter = function() {
