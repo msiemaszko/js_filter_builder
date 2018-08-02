@@ -64,7 +64,7 @@ var selectData = {
 };
 ```
 
-#### POST data : 
+#### obtained POST data : 
 ```php
 Array
 (
