@@ -9,11 +9,11 @@
     <title>JS Filter Builders</title>
     <link rel="stylesheet" href="style/style.css">
 </head>
-<body><center style="margin-top: 50px;">
+<body><center>
 
     <div id="filterTable">
         <p>JS Filter Builder</p>
-        <form method="POST" action="result.php">
+        <form method="POST">
             <table>
                 <thead>
                     <tr>
@@ -33,14 +33,21 @@
                 <tfoot>
                     <tr>
                         <td colspan="4">
-                            <input class="icon btnAddRow" type="button" onclick="addNewRow()" value="dodaj warunek">
-                            <input class="icon btnAccept" type="button" onclick="confirmFilter()" value="zatwierdz">
+                            <input class="icon btnAddRow" type="button" onclick="" value="dodaj warunek">
+                            <input class="icon btnAccept" type="button" onclick="" value="zatwierdz">
                         </td>
                     </tr>
                 </tfoot>
             </table>
         </form>        
     </div>
+
+    <div id="resultHandler">
+        <p>HttpRequest result </p>
+        <div id="result"></div>
+    </div>
+
+        
 
 </center></body>
 </html>
@@ -104,4 +111,5 @@
 </script>
 
 <!-- loading the script -->
+<script type="text/javascript" src="js/listaStorage.js"></script>
 <script type="text/javascript" src="js/filer_builders.js"></script>

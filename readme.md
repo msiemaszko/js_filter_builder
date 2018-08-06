@@ -1,9 +1,9 @@
 ## JS Filter Builder
 ----
-HTML / JS Dynamic filter generator. The script generates a form and inputs, which data can be sent by POST to any php script.
+HTML /JS/ajax Dynamic filter generator. The script generates a form and inputs, which data can be sent via POST (XMLHttpRequest) to any php script. The results are collected in real time. The filtering criteria are stored in the browser's LocalStorage.
 
 <p align="center">
-  <img src="screenshot_1.png">
+  <img src="screenshot.png">
 </p>
 
 
@@ -102,8 +102,3 @@ Array
 
 )
 ```
-
-#### result.php : 
-<p align="center">
-  <img src="screenshot_2.png">
-</p>

@@ -2,15 +2,16 @@
     cursor: pointer;
 }
 
-#filterTable {
+#filterTable, #resultHandler {
     width: 460px;
+    margin-top: 50px;
 }
 
-#filterTable p {
+#filterTable p, #resultHandler p{
     text-align: left;
     font-size: 30pt;
     margin: 10px 0px;
-    font-family: Helvetica;
+    font-family: Helvetica; 
 }
 
 #filterTable table {
@@ -44,7 +45,7 @@
 
 #filterTable table input, #filterTable table select, #filterTable table option {
     width: 90%;
-    height: 23px;
+    height: 22px;
     margin: 2px auto;
     
     text-align: center;
@@ -53,6 +54,10 @@
     border: 1px solid gray;
     border-radius: 2px;
     vertical-align: middle;
+}
+
+#filterTable table input[type=date] {
+    height: 18px;
 }
 
 #filterTable .btnAddRow, #filterTable .btnDelete, #filterTable .btnAccept {
@@ -85,3 +90,17 @@
     width: 20px;
     background: url(../img/ico_delete.png) no-repeat 2px center;
 }
+
+/* ========== result ========= */
+#result table {
+    border: 1px solid grey;
+    border-collapse: collapse;
+    font-family: Helvetica;
+    width: 100%;
+}
+
+    #result td, #result th {
+        border: 1px solid grey;
+        text-align: center;
+        padding: 5px;
+    }

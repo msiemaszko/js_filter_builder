@@ -1,41 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        table {
-            border: 1px solid grey;
-            border-collapse: collapse;
-            margin: 50px auto;
-        }
-
-        td, th {
-            border: 1px solid grey;
-            text-align: center;
-            padding: 5px;
-        }
-            
-    </style>
-</head>
-<body>
-    <table>
+<table>
+        <tr>
+            <th>column</th>
+            <th>operator</th>
+            <th>value_1</th>
+            <th>value_2</th>
+        </tr>
+    <?php
+        // echo "<pre>".print_r($_POST, true)."</pre>";
+        if ($_POST)
+        foreach ( $_POST["data"] as $obj) {
+            $obj = json_decode($obj);
+            echo "
             <tr>
-                <th>column</th>
-                <th>operator</th>
-                <th>value_1</th>
-                <th>value_2</th>
+                <td>{$obj->column}</td>
+                <td>{$obj->operator}</td>
+                <td>{$obj->value_1}</td>
+                <td>{$obj->value_2}</td>
             </tr>
-        <?php
-            if ($_POST)
-            for ($i = 0; $i <= (count($_POST["column"])-1); $i++ ) {
-                echo "
-                <tr>
-                    <td>{$_POST["column"][$i]}</td>
-                    <td>{$_POST["operator"][$i]}</td>
-                    <td>{$_POST["value_1"][$i]}</td>
-                    <td>{$_POST["value_2"][$i]}</td>
-                </tr>";
-            }
-        ?>
-    </table>
-</body>
-</html>
+            ";
+        }
+    ?>
+</table>

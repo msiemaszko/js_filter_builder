@@ -1,42 +1,130 @@
-// var tableRef = document.getElementById('filterTable').getElementsByTagName('tbody')[0];
-// var formRef = document.getElementById('filterTable').getElementsByTagName('form')[0];
-
 var tableRef = document.querySelector("#filterTable tbody");
 var formRef = document.querySelector("#filterTable form");
+var result = document.querySelector("#result");
 
+// wczytuje informacje z localStorage, tworzy tabele oraz wysyła zapytanie http
+function loadItems() {
+    let lista = getStorage("data-filter");
+    if ( lista.length > 0) {
+        for ( let x in lista ) {
+            addNewRow(null, lista[x]);
+        }
+        sendHttpRequest();
+    }
+    else addNewRow();
+}
 
-confirmFilter = function() {
+// obsługa przycisku `zatwierdz` - generuje tablice wartości, aktualizuje localStorage i wysyła httpRequest
+function confirmFiltration() {
+    
+    let tableRef = document.querySelectorAll("#filterTable tbody tr");
+    let tmpArray = [];
 
-    // for(i = 0; i < formRef.length; i++) {
-        // alert(formRef[i].name + ': ' + formRef[i].value);
-    // }
-    formRef.submit();
+    // dla każdego wiersza w tabeli
+    for ( let i = 0; i < tableRef.length; i++ ) 
+    {
+        // skip empty inputs
+        if ( tableRef[i].childNodes[1].childNodes[0].value == "-- wybierz kolumne --" ) continue;
+        if ( tableRef[i].childNodes[3].childNodes[0].value == "" ) continue;
+
+        let dataObject = {
+            "column":  tableRef[i].childNodes[1].childNodes[0].value,
+            "operator": tableRef[i].childNodes[2].childNodes[0] !== undefined ? tableRef[i].childNodes[2].childNodes[0].value : "",
+            "value_1": tableRef[i].childNodes[3].childNodes[0] !== undefined ? tableRef[i].childNodes[3].childNodes[0].value : "",
+            "value_2": tableRef[i].childNodes[3].childNodes[1] !== undefined ? tableRef[i].childNodes[3].childNodes[1].value : ""
+        }
+
+        tmpArray.push( dataObject );
+    }
+
+    // zaktualizuj localStorage
+    updateStorage("data-filter", tmpArray);
+    sendHttpRequest();
+}
+
+// na podstawie danych localStorage wysyła zapytanie HttpRequest
+function sendHttpRequest()
+{
+    let lista = getStorage("data-filter");
+    let formdata = new FormData();
+
+    // przygotowanie danych formularza POST
+    for ( let x in lista ) {
+        formdata.append("data[]", JSON.stringify({
+            "column":   lista[x].column,
+            "operator": lista[x].operator,
+            "value_1":  lista[x].value_1,
+            "value_2":  lista[x].value_2,
+        }))
+    }
+
+    // obiekt xml-http
+    var xmlhttp;
+    if(window.XMLHttpRequest) {
+        xmlhttp = new XMLHttpRequest;
+    } else {
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    // odebranie danych
+    xmlhttp.onreadystatechange = function() {
+        if( xmlhttp.readyState == 4 && xmlhttp.status == 200 ) {
+
+            // console.log(xmlhttp.responseText);
+            result.innerHTML = xmlhttp.responseText;
+        }
+    }
+
+    // wysłanie zapytania
+    xmlhttp.open("POST", "result.php");
+    xmlhttp.send(formdata);
 }
 
 // dodaje nowy wiersz do tabeli
-addNewRow = function() {
+function addNewRow( event = null, dataObject = null ) 
+{
+    var newCell, newchild;
     var rowCount = tableRef.rows.length;
     
     // Insert a row in the table
     var newRow  = tableRef.insertRow(rowCount);
 
     // cell 0: button delete row
-    newCell = newRow.insertCell(0);
-    newCell.appendChild( createNewElement("dellButton") );
+    deleteCell = newRow.insertCell(0);
+    deleteCell.appendChild( createNewElement("dellButton") );
+    
+    // celll 1: column option
+    columnCell = newRow.insertCell(1);
+    columnList = createNewElement("columnList", selectData);
+    columnCell.appendChild( columnList );
 
-    // cell 1: select - kolumna
-    newCell = newRow.insertCell(1);
-    newchild = createNewElement("columnList", selectData);
-    newchild.name = "column[]";
-    newCell.appendChild( newchild );
+    // cell 2 && 3
+    operatCell = newRow.insertCell(2);
+    valueCell = newRow.insertCell(3);
 
-    // cell 2 & 3
-    newRow.insertCell(2);
-    newRow.insertCell(3);
+    // w przypadku gdy oddtwarzam tabele z localStorage 
+    if (dataObject != null ) 
+    {
+        columnValue   = dataObject.column;
+        operatorValue = dataObject.operator;
+        valueValue_1  = dataObject.value_1;
+        valueValue_2  = dataObject.value_2;
+
+        // cell 1: select - kolumna
+        columnList.value = columnValue;
+        columnCell.appendChild( columnList );
+        
+        // cell 2: operator list
+        operatorList = createNewOperatorList(columnValue, operatorValue);
+        operatCell.appendChild( operatorList );
+        
+        // cell 3
+        createNewValueFields(valueCell, selectData[columnValue].type, selectData[columnValue].data, operatorValue, valueValue_1, valueValue_2 );
+    }
 }
 
 // tworzy nowy element typu `type` (text/empty_input/dellButton/columnList/operatorList)
-createNewElement = function(type = "text", data = [], operator = ""){
+function createNewElement(type = "text", data = [], operator = ""){
     var inputID, selectID;
     switch(type){
 
@@ -57,17 +145,15 @@ createNewElement = function(type = "text", data = [], operator = ""){
         case "text":
             inputID = document.createElement("input");
             inputID.type = "text";
-            // inputID.name = "wartosc[]";
             return inputID;
         
         // lista kolumn
         case "columnList":
             selectID = document.createElement("select");
             selectID.rodzaj = "column";
-            // selectID.name = "column[]";
 
             // blank option
-            blank = document.createElement("OPTION");
+            var blank = document.createElement("OPTION");
             blank.disabled = "disabled";
             blank.selected = "selected";
             blank.text     = " -- wybierz kolumne -- ";
@@ -86,7 +172,6 @@ createNewElement = function(type = "text", data = [], operator = ""){
         // lista dla operatorw: jako data tablica {key: value, key2: value2}
         case "operatorList":
             selectID = document.createElement("select");
-            // selectID.name = "operator[]";
             for( let elem in data ) {
                 let x = document.createElement("OPTION");
                 x.value =  data[elem];
@@ -99,7 +184,6 @@ createNewElement = function(type = "text", data = [], operator = ""){
         // lista dla skrytek: jako data tablica {"key1": [val1, val2], "key2":[...]
         case "skrytkaList":
             selectID = document.createElement("select");
-            // selectID.name = "wartosc[]";
 
             for( let key in data) {
                 for ( let value in data[key]) {                        
@@ -134,9 +218,38 @@ createNewElement = function(type = "text", data = [], operator = ""){
     }
 }
 
+// tworzy liste dla typu operator
+function createNewOperatorList(columnValue = "", value = "") {
+    let newchild = createNewElement( "operatorList",                selectData[columnValue].operators );
+    if (value != "" ) newchild.value = value;
+    newchild.rodzaj = "operator";
+    return newchild;
+}
+
+// tworzy inputy dla wartości
+function createNewValueFields(cell = null, type = "", data = [], operatorValue = "", valueValue_1 = "", valueValue_2 = "" ) {
+    let newchild;
+
+    // value 1:
+    newchild = createNewElement( type, data );
+    if (valueValue_1 != "") newchild.value = valueValue_1;
+    cell.appendChild(newchild);
+
+    // value 2:
+        // jeżeli porównanie typu between twórz jako utwórz normalny input
+        if (operatorValue == "btw") {
+            newchild = createNewElement( type, data );
+        } 
+        else 
+            newchild = createNewElement( "empty_input" );
+    if (valueValue_2 != "") newchild.value = valueValue_2;
+    cell.appendChild(newchild);
+}
+
 // event-delegation: action on change select
-changeSelect = function(event) 
+function selectOnChange(event) 
 {
+    var newChild;
     if (!event.target.matches('select')) return false;
 
     let elem = event.target;
@@ -151,46 +264,32 @@ changeSelect = function(event)
         // change select with type column
         case "column":
             clearCell(cell_2th);
-            newchild = createNewElement( "operatorList",                    selectData[columnValue].operators );
-            newchild.rodzaj = "operator";
-            newchild.name = "operator[]"; // nazwa inputa w formie
-            cell_2th.appendChild(newchild);
+            newChild = createNewOperatorList(columnValue);
+            cell_2th.appendChild(newChild);
             // no-break
             
         // change select with type opertor
         case "operator":
-            operatorValue = elem.value;
+            var operatorValue = elem.value;
             clearCell(cell_3th);
             
-            // value 1:
-            newchild = createNewElement( selectData[columnValue].type,      selectData[columnValue].data );
-            newchild.name = "value_1[]"; // nazwa inputa w formie
-            cell_3th.appendChild(newchild);
-            
-            // value 2
-            newchild = createNewElement( "empty_input" );
-
-            // jeżeli porównanie typu between twórz jako utwórz normalny input
-            if (operatorValue == "btw") {
-                newchild = createNewElement( selectData[columnValue].type,  selectData[columnValue].data );
-            }
-
-            newchild.name = "value_2[]"; // nazwa inputa w formie
-            cell_3th.appendChild(newchild);
+            // value fields:
+            createNewValueFields(cell_3th, selectData[columnValue].type, selectData[columnValue].data, operatorValue )
         break;
 
     } // end switch
 }
 
+
 // dla komorki cell usuń wszystkie dzieci
-clearCell = function (cell){
+function clearCell(cell){
     while (cell.firstChild) {
         cell.removeChild(cell.firstChild);
     }
 }
 
 // dla podanego elementu kasuje dziadka - wiersz tabeli
-deleteTableRow = function(event) {
+function deleteTableRow (event) {
     if (event.target.rodzaj == "btnDelete") {
         let i = event.target.parentNode.parentNode.rowIndex - 1;
         tableRef.deleteRow(i);
@@ -198,6 +297,8 @@ deleteTableRow = function(event) {
 }
 
 // event listenery
-tableRef.addEventListener("change", changeSelect);
+tableRef.addEventListener("change", selectOnChange);
 tableRef.addEventListener("click", deleteTableRow);
-window.addEventListener("load", addNewRow);
+document.querySelector(".btnAddRow").addEventListener("click", addNewRow);
+document.querySelector(".btnAccept").addEventListener("click", confirmFiltration);
+window.addEventListener("load", loadItems);
