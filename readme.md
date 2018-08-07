@@ -1,6 +1,6 @@
 ## JS Filter Builder
 ----
-HTML /JS/ajax Dynamic filter generator. The script generates a form and inputs, which data can be sent via POST (XMLHttpRequest) to any php script. The results are collected in real time. The filtering criteria are stored in the browser's LocalStorage.
+HTML / JS / ajax Dynamic filter generator. The script generates dynamic inputs, which data can be sent via POST (XMLHttpRequest) to any php script. The results are collected in real time. The filtering criteria are stored in the browser's LocalStorage. Pagination engine allow send extra info about current page and ammount of subsites.
 
 <p align="center">
   <img src="screenshot.png">
@@ -68,37 +68,27 @@ var selectData = {
 ```php
 Array
 (
-    [column] => Array
+    [filtering] => Array
         (
-            [0] => skrytka
-            [1] => tytul
-            [2] => send_date
-            [3] => typ
+            [0] => {
+                "column"    : "skrytka",
+                "operator"  : "eq",
+                "value_1"   : "domyslny",
+                "value_2"   : ""
+                }
+            [1] => {
+                "column"    : "send_date",
+                "operator"  : "btw",
+                "value_1"   : "2018-07-02",
+                "value_2"   : "2018-08-31"}
+            [2] => {
+                "column"    : "tytul",
+                "operator"  : "lke",
+                "value_1"   : "pozdrowienia",
+                "value_2"   : ""
+                }
         )
 
-    [operator] => Array
-        (
-            [0] => eq
-            [1] => eq
-            [2] => btw
-            [3] => eq
-        )
-
-    [value_1] => Array
-        (
-            [0] => domyslny
-            [1] => pozdrowienia
-            [2] => 2018-07-02
-            [3] => Pismo Ogóle
-        )
-
-    [value_2] => Array
-        (
-            [0] => 
-            [1] => 
-            [2] => 2018-08-23
-            [3] => 
-        )
-
+    [site_current] => 1
 )
 ```

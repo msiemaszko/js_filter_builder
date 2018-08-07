@@ -3,15 +3,15 @@ var formRef = document.querySelector("#filterTable form");
 var result = document.querySelector("#result");
 
 // wczytuje informacje z localStorage, tworzy tabele oraz wysyła zapytanie http
-function loadItems() {
-    let lista = getStorage("data-filter");
+function tableConstructor() {
+    let lista = getStorageList("data_filter");
     if ( lista.length > 0) {
         for ( let x in lista ) {
             addNewRow(null, lista[x]);
         }
-        sendHttpRequest();
     }
     else addNewRow();
+    sendHttpRequest();
 }
 
 // obsługa przycisku `zatwierdz` - generuje tablice wartości, aktualizuje localStorage i wysyła httpRequest
@@ -38,46 +38,9 @@ function confirmFiltration() {
     }
 
     // zaktualizuj localStorage
-    updateStorage("data-filter", tmpArray);
+    updateStorageList("data_filter", tmpArray);
+    paginGoto(1);
     sendHttpRequest();
-}
-
-// na podstawie danych localStorage wysyła zapytanie HttpRequest
-function sendHttpRequest()
-{
-    let lista = getStorage("data-filter");
-    let formdata = new FormData();
-
-    // przygotowanie danych formularza POST
-    for ( let x in lista ) {
-        formdata.append("data[]", JSON.stringify({
-            "column":   lista[x].column,
-            "operator": lista[x].operator,
-            "value_1":  lista[x].value_1,
-            "value_2":  lista[x].value_2,
-        }))
-    }
-
-    // obiekt xml-http
-    var xmlhttp;
-    if(window.XMLHttpRequest) {
-        xmlhttp = new XMLHttpRequest;
-    } else {
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    // odebranie danych
-    xmlhttp.onreadystatechange = function() {
-        if( xmlhttp.readyState == 4 && xmlhttp.status == 200 ) {
-
-            // console.log(xmlhttp.responseText);
-            result.innerHTML = xmlhttp.responseText;
-        }
-    }
-
-    // wysłanie zapytania
-    xmlhttp.open("POST", "result.php");
-    xmlhttp.send(formdata);
 }
 
 // dodaje nowy wiersz do tabeli
@@ -301,4 +264,4 @@ tableRef.addEventListener("change", selectOnChange);
 tableRef.addEventListener("click", deleteTableRow);
 document.querySelector(".btnAddRow").addEventListener("click", addNewRow);
 document.querySelector(".btnAccept").addEventListener("click", confirmFiltration);
-window.addEventListener("load", loadItems);
+window.addEventListener("load", tableConstructor);

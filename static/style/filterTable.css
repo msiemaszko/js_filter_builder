@@ -2,15 +2,21 @@
     cursor: pointer;
 }
 
-#filterTable, #resultHandler {
+#filterTable, #resultHandler, #paginationHandler {
     width: 460px;
     margin-top: 50px;
+    font-size: 13px;
 }
 
-#filterTable p, #resultHandler p{
+#filterTable p, #resultHandler p, #paginationHandler p {
     text-align: left;
-    font-size: 30pt;
+    font-size: 18pt;
     margin: 10px 0px;
+    font-family: Helvetica; 
+}
+
+#resultHandler div {
+    margin-top: 10px;
     font-family: Helvetica; 
 }
 

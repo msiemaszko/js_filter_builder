@@ -7,39 +7,38 @@
     <meta name="author" content="Marek Siemaszko">
     <meta name="description" content="budowanie filtrów w js">
     <title>JS Filter Builders</title>
-    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="static/style/filterTable.css">
+    <link rel="stylesheet" href="static/style/pagination.css">
 </head>
 <body><center>
 
     <div id="filterTable">
         <p>JS Filter Builder</p>
-        <form method="POST">
-            <table>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Kolumna</th>
-                        <th>Operator</th>
-                        <th>Wyrażenie</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- <tr>
-                        <td>kraj</td> 
-                        <td>=</td> 
-                        <td>Polska</td> 
-                    </tr> -->
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="4">
-                            <input class="icon btnAddRow" type="button" onclick="" value="dodaj warunek">
-                            <input class="icon btnAccept" type="button" onclick="" value="zatwierdz">
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        </form>        
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Kolumna</th>
+                    <th>Operator</th>
+                    <th>Wyrażenie</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr>
+                    <td>kraj</td> 
+                    <td>=</td> 
+                    <td>Polska</td> 
+                </tr> -->
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <input class="icon btnAddRow" type="button" onclick="" value="dodaj warunek">
+                        <input class="icon btnAccept" type="button" onclick="" value="zatwierdz">
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
 
     <div id="resultHandler">
@@ -47,6 +46,10 @@
         <div id="result"></div>
     </div>
 
+    <div id="paginationHandler">
+        <p>Pagination Examples </p>
+        <ul id="pagination" class="pagination"></ul>
+    </div>
         
 
 </center></body>
@@ -72,7 +75,6 @@
         "ADN",
         "Pismo Ogóle"
     ];
-
 
     // definition of operators
     var operatorsList = {
@@ -111,5 +113,7 @@
 </script>
 
 <!-- loading the script -->
-<script type="text/javascript" src="js/listaStorage.js"></script>
-<script type="text/javascript" src="js/filterBuilder.js"></script>
+<script type="text/javascript" src="static/js/localStorage.js"></script>
+<script type="text/javascript" src="static/js/filterBuilder.js"></script>
+<script type="text/javascript" src="static/js/pagination.js"></script>
+<script type="text/javascript" src="static/js/httpRequest.js"></script>
