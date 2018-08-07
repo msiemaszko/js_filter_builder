@@ -4,6 +4,7 @@ ul.pagination {
     margin: 0;
     font-family: Helvetica;
     font-size: 13px;
+    text-align: center;
 }
 
 ul.pagination li {display: inline;}

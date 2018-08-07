@@ -4,6 +4,7 @@
 
 #filterTable, #resultHandler, #paginationHandler {
     width: 460px;
+    margin: 0px auto;
     margin-top: 50px;
     font-size: 13px;
 }
@@ -37,16 +38,20 @@
     background: url(../img/white-top-bottom.gif) repeat-x 0px -1px;
 }
 
+#filterTable table tbody tr td { 
+    background: white;
+}
+
 /* wiersz stopki */
 #filterTable table tfoot tr td { 
     text-align: left;
-    padding: 5px; 
-    /* background-color: rgb(208, 222, 240); */
+    padding: 5px;
+    background: white;
 }
 
-#filterTable table tr th:nth-child(1) { width: 10px }
-#filterTable table tr th:nth-child(2) { width: 35% }
-#filterTable table tr th:nth-child(3) { width: 20% }
+#filterTable table tr td:nth-child(1) { width: 10px }
+#filterTable table tr td:nth-child(2) { width: 35% }
+#filterTable table tr td:nth-child(3) { width: 20% }
 #filterTable table tr td { text-align: center; padding: 5px 0px 5px 0px; }
 
 #filterTable table input, #filterTable table select, #filterTable table option {
@@ -73,23 +78,24 @@
     border-radius: 2px;
 }
 
-#filterTable .btnAccept {
+#filterTable .btnAccept, #filterTable .btnAddRow {
     width: auto;
     padding-left: 21px;
-    background: white url(../img/ico_accept.png) no-repeat 2px center;
-    border-color: white;
-}
-
-#filterTable .btnAddRow {
-    width: auto;
-    padding-left: 21px;
-    background: white url(../img/ico_add.png) no-repeat 2px center;
+    padding-right: 5px;
     border-color: white;
 }
     #filterTable .btnAddRow:hover, 
     #filterTable .btnAccept:hover {
         border-color: gray;
     }
+
+#filterTable .btnAccept {
+    background: white url(../img/ico_accept.png) no-repeat 2px center;
+}
+
+#filterTable .btnAddRow {
+    background: white url(../img/ico_add.png) no-repeat 2px center;
+}
 
 #filterTable .btnDelete {
     display: block;
