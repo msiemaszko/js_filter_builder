@@ -52,11 +52,11 @@ function addNewRow( event, dataObject )
 
     // cell 0: button delete row
     deleteCell = newRow.insertCell(0);
-    deleteCell.appendChild( createNewElement("dellButton") );
+    deleteCell.appendChild( createNewElement( { "type" : "dellButton" } ));
     
     // celll 1: column option
     columnCell = newRow.insertCell(1);
-    columnList = createNewElement("columnList", selectData);
+    columnList = createNewElement( {"type" : "columnList", "data" : selectData } );
     columnCell.appendChild( columnList );
 
     // cell 2 && 3
@@ -80,21 +80,19 @@ function addNewRow( event, dataObject )
         operatCell.appendChild( operatorList );
         
         // cell 3
-        createNewValueFields(valueCell, selectData[columnValue].type, selectData[columnValue].data, operatorValue, valueValue_1, valueValue_2 );
+        createNewValueFields(valueCell, selectData[columnValue], operatorValue, valueValue_1, valueValue_2 );
     }
 }
 
 // tworzy nowy element typu `type` (text/empty_input/dellButton/columnList/operatorList)
-function createNewElement(type, data){
-    let inputID, selectID;
-    data = data || [];
+function createNewElement( dataObject ){
+    let del, inputID, selectID, option;
 
-
-    switch(type) {
+    switch(dataObject.type) {
 
         // button delete
         case "dellButton":
-            let del = document.createElement('span');
+            del = document.createElement('span');
             del.className = "icon btnDelete";
             del.rodzaj = "btnDelete";
         return del;
@@ -109,7 +107,8 @@ function createNewElement(type, data){
         case "text":
             inputID = document.createElement("input");
             inputID.setAttribute("type", "text");
-            inputID.setAttribute('list', data); // list -> datalist
+            if (dataObject.p_holder !== undefined) inputID.setAttribute('placeholder',  dataObject.p_holder);
+            if (dataObject.data     !== undefined) inputID.setAttribute('list',         dataObject.data); // list -> datalist
             return inputID;
         
         // lista kolumn
@@ -118,15 +117,15 @@ function createNewElement(type, data){
             selectID.rodzaj = "column";
 
             // blank option
-            let blank = document.createElement("OPTION");
+            blank = document.createElement("OPTION");
             blank.disabled = "disabled";
             blank.selected = "selected";
             blank.text     = " -- wybierz kolumne -- ";
             selectID.appendChild( blank );
 
-            for( let key in data ) {
-                let object = data[key];
-                let option = document.createElement("OPTION");
+            for( let key in dataObject.data ) {
+                object = dataObject.data[key];
+                option = document.createElement("OPTION");
                 option.value = key;
                 option.text = object.text;
                 selectID.appendChild( option );
@@ -137,10 +136,10 @@ function createNewElement(type, data){
         // lista dla operatorw: jako data tablica {key: value, key2: value2}
         case "operatorList":
             selectID = document.createElement("select");
-            for( let elem in data ) {
-                let option = document.createElement("OPTION");
-                option.value =  data[elem];
-                option.text = operatorsList[ data[elem] ];
+            for( let elem in dataObject.data ) {
+                option = document.createElement("OPTION");
+                option.value =  dataObject.data[elem];
+                option.text = operatorsList[ dataObject.data[elem] ];
                 selectID.appendChild( option );
             }
             return selectID;
@@ -150,11 +149,11 @@ function createNewElement(type, data){
         case "skrytkaList":
             selectID = document.createElement("select");
 
-            for( let key in data) {
-                for ( let value in data[key]) {                        
-                    let option = document.createElement("OPTION");
-                    option.value = key + '/'+ data[key][value];
-                    option.text = key + '/'+ data[key][value];
+            for( let key in dataObject.data) {
+                for ( let value in dataObject.data[key]) {                        
+                    option = document.createElement("OPTION");
+                    option.value = key + '/'+ dataObject.data[key][value];
+                    option.text = key + '/'+ dataObject.data[key][value];
                     selectID.appendChild( option );
                 }
             }
@@ -164,10 +163,10 @@ function createNewElement(type, data){
         // lista prosta: jako data tablica ["val1, val2"]
         case "list":
             selectID = document.createElement("select");
-            for( let elem in data ) {
-                let option = document.createElement("OPTION");
-                option.value = data[elem];
-                option.text = data[elem];
+            for( let elem in dataObject.data ) {
+                option = document.createElement("OPTION");
+                option.value = dataObject.data[elem];
+                option.text = dataObject.data[elem];
                 selectID.appendChild( option );
             }
             return selectID; 
@@ -183,28 +182,28 @@ function createNewElement(type, data){
 
 // tworzy liste dla typu operator
 function createNewOperatorList(columnValue, value) {
-    let newchild = createNewElement( "operatorList",                selectData[columnValue].operators );
+    let newchild = createNewElement( { "type" : "operatorList" , "data" : selectData[columnValue].operators } );
     if (value !== undefined) newchild.value = value;
     newchild.rodzaj = "operator";
     return newchild;
 }
 
 // tworzy inputy dla wartości
-function createNewValueFields(cell, type, data, operatorValue, valueValue_1, valueValue_2) {
+function createNewValueFields(cell, dataObject, operatorValue, valueValue_1, valueValue_2) {
     let newchild;
 
     // value 1:
-    newchild = createNewElement( type, data );
+    newchild = createNewElement( dataObject );
     if (valueValue_1 !== undefined) newchild.value = valueValue_1;
     cell.appendChild(newchild);
 
     // value 2:
         // jeżeli porównanie typu between twórz jako utwórz normalny input
         if (operatorValue == "btw") {
-            newchild = createNewElement( type, data );
+            newchild = createNewElement( dataObject );
         } 
         else 
-            newchild = createNewElement( "empty_input" );
+            newchild = createNewElement( {type: "empty_input"} );
     if (valueValue_2 !== undefined) newchild.value = valueValue_2;
     cell.appendChild(newchild);
 }
@@ -237,7 +236,7 @@ function selectOnChange(event)
             clearCell(cell_3th);
             
             // value fields:
-            createNewValueFields(cell_3th, selectData[columnValue].type, selectData[columnValue].data, operatorValue )
+            createNewValueFields(cell_3th, selectData[columnValue], operatorValue )
         break;
 
     } // end switch

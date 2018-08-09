@@ -10,12 +10,14 @@ function paginDraw() {
     let paginList = 
     [
         {
-            "img" : "static/img/page-first.gif",
-            "function" : "paginFirst()"
+            "img"       : "static/img/page-first.gif",
+            "function"  : "paginFirst()",
+            "style"     : "navi"
         },
         {
-            "img" : "static/img/page-prev.gif",
-            "function" : "paginPrev()"
+            "img"       : "static/img/page-prev.gif",
+            "function"  : "paginPrev()",
+            "style"     : "navi"
         }
     ];
 
@@ -33,18 +35,20 @@ function paginDraw() {
 
     // next - last
     paginList.push({ 
-            "img" : "static/img/page-next.gif",
-            "function" : "paginNext()"
+            "img"       : "static/img/page-next.gif",
+            "function"  : "paginNext()",
+            "style"     : "navi"
         });
     paginList.push({ 
-            "img" : "static/img/page-last.gif",
-            "function" : "paginLast()"
+            "img"       : "static/img/page-last.gif",
+            "function"  : "paginLast()",
+            "style"     : "navi"
         });
     
     // rysuj wszystkie bloczki
     pagination.innerHTML = paginList.map( function(i, index) {
         return "<li>"+
-            "<a " + (( i.etykieta == siteCurrent ) ? "class='active'" : "nie" ) + " onclick='" + i.function + "'>" + 
+            "<a " + (( i.etykieta == siteCurrent ) ? "class='active'" : "class='"+ i.style +"'" ) + " onclick='" + i.function + "'>" + 
                 ((i.etykieta) ? i.etykieta : "<img src='"+i.img+"'/>" ) + 
             "</a>" + 
         "</li>";

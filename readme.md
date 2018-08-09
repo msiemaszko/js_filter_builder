@@ -1,67 +1,107 @@
 ## JS Filter Builder
 ----
-HTML / JS / ajax Dynamic filter generator. The script generates dynamic inputs, which data can be sent via POST (XMLHttpRequest) to any php script. The results are collected in real time. The filtering criteria are stored in the browser's LocalStorage. Pagination engine allow send extra info about current page and ammount of subsites.
+HTML / JS / ajax - **Dynamic Filter Generator**
+
+The script generates dynamic inputs, which data can be sent via POST (XMLHttpRequest) to any php script. 
+
+In a simple dictionary (*selectData* object) you can define column description, input type, associated operators, datalist suggestions and placeholder for value fields.
+
+The results are collected in real time. The filtering criteria are stored in the browser's LocalStorage. Pagination engine allow send extra info about current page and ammount of subsites.
 
 <p align="center">
   <img src="screenshot.png">
 </p>
 
 
-#### input data :
-```js
-// values for the column `skrytka`
-datalist_skrytki = {
-    "domyslny": [
-        "Wysłane",
-        "Odebrane"
-    ],
-    "egzadm": [
-        "Wysłane",
-        "Odebrane"
-    ]
-};
 
-// values for the column `typ`
-datalist_typ = [
-    "TW-1",
-    "ADN",
-    "Pismo Ogóle"
-];
 
-// definition of operators
-var operatorsList = {
-    "gt"  : ">",
-    "le"  : "<",
-    "eq"  : "=",
-    "btw" : "between",
-    "lke" : "like"
-};
+#### defining the dictionary :
+```html
+<script>
+    // values for the column `skrytka`
+    let datalist_skrytki = {
+        "domyslny": [
+            "Wysłane",
+            "Odebrane"
+        ],
+        "zapasowy": [
+            "Wysłane",
+            "Odebrane"
+        ]
+    };
 
-// definition of columns, allowed operators and value types
-var selectData = {
-    "skrytka" : {
-        "text"      : "Skrytka",
-        "type"      : "skrytkaList",
-        "operators" : ["eq"],
-        "data"      : datalist_skrytki
-    },
-    "send_date" : {
-        "text"      : "Data wysyłki",
-        "type"      : "date",
-        "operators" : ["eq", "gt", "le", "btw"]
-    },
-    "typ": {
-        "text"      : "Typ pisma",
-        "type"      : "list",
-        "operators" : ["eq", "lke"],
-        "data"      : datalist_typ
-    },
-    "tytul": {
-        "text"  : "Tytuł",
-        "type"  : "text",
-        "operators" : ["eq", "lke"]
-    }
-};
+    // values for the column `typ`
+    let datalist_typ = [
+        "Cooking ",
+        "Fantasy",
+        "Horror",
+        "Science-fiction",
+        "Romance "
+    ];
+
+    // definition of operators
+    let operatorsList = {
+        "gt"  : ">",
+        "le"  : "<",
+        "eq"  : "=",
+        "btw" : "between",
+        "lke" : "like"
+    };
+
+    // definition of columns, allowed operators and value types
+    let selectData = {
+        "Skrytka" : {
+            "text"      : "Skrytka",
+            "type"      : "skrytkaList",
+            "operators" : ["eq"],
+            "data"      : datalist_skrytki
+        },
+        "Type": {
+            "text"      : "Gatunek",
+            "type"      : "list",
+            "operators" : ["eq"],
+            "data"      : datalist_typ
+        },
+        "Tytul": {
+            "text"      : "Tytuł",
+            "type"      : "text",
+            "operators" : ["eq", "lke"],
+            "data"      : "datalist_tytuly"
+        },
+        "Autor": {
+            "text"      : "Autor ksiazki",
+            "type"      : "text",
+            "operators" : ["lke", "eq"],
+            "p_holder"  : "wpisz nazwisko autora",
+            "data"      : "datalist_autorzy"
+        },
+        "Date" : {
+            "text"      : "Data dodania",
+            "type"      : "date",
+            "operators" : ["eq", "gt", "le", "btw"]
+        },
+    };
+</script>
+
+<!-- datalist suggestions for books title -->
+<datalist id="datalist_tytuly">
+    <option value="365 dni">
+    <option value="Tatuażysta z Auschwitz">
+    <option value="Na skraju załamania">
+    <option value="Apartament w Paryżu">
+    <option value="Hashtag">
+    <option value="Rywalka">
+</datalist>
+
+<!-- datalist suggestions for books authors -->
+<datalist id="datalist_autorzy">
+    <option value="Aames Lani">
+    <option value="Fabis Nikolaj">
+    <option value="Haas Derek">
+    <option value="Kabbani Razi">
+    <option value="Kacman Perła">
+    <option value="Kacprzyk Agnieszka">
+</datalist>
 ```
 
 #### obtained POST data : 

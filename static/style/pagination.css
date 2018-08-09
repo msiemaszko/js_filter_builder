@@ -32,13 +32,14 @@ ul.pagination li a img {vertical-align: middle;}
 }
 
 ul.pagination li a.active {
-    background-color: #d9e7f6;
-    color: #15428b;
+    background-color: #0D66A5;
+    color: white;
     font-weight: bold;
     border: 1px solid #b0caed;
 }
 
-ul.pagination li a:hover:not(.active) {
-    background-color: #b0caed;
-    cursor: pointer;
+ul.pagination li a:hover { cursor: pointer }
+ul.pagination li a:hover:not(.active):not(.navi) {
+    background-color:  #1293EE;
+    color: white;
 }
