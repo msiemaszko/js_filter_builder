@@ -1,13 +1,12 @@
-var tableRef = document.querySelector("#filterTable tbody");
-var formRef = document.querySelector("#filterTable form");
-var result = document.querySelector("#result");
+let tableRef = document.querySelector("#filterTable tbody");
+let result = document.querySelector("#result");
 
 // wczytuje informacje z localStorage, tworzy tabele oraz wysyła zapytanie http
 function tableConstructor() {
-    let lista = getStorageList("data_filter");
-    if ( lista.length > 0) {
-        for ( let x in lista ) {
-            addNewRow(null, lista[x]);
+    let list = getStorageList("data_filter");
+    if ( list.length > 0) {
+        for ( let x in list ) {
+            addNewRow(null, list[x]);
         }
     }
     else addNewRow();
@@ -28,12 +27,11 @@ function confirmFiltration() {
         if ( tableRef[i].childNodes[3].childNodes[0].value == "" ) continue;
 
         let dataObject = {
-            "column":  tableRef[i].childNodes[1].childNodes[0].value,
-            "operator": tableRef[i].childNodes[2].childNodes[0] !== undefined ? tableRef[i].childNodes[2].childNodes[0].value : "",
-            "value_1": tableRef[i].childNodes[3].childNodes[0] !== undefined ? tableRef[i].childNodes[3].childNodes[0].value : "",
-            "value_2": tableRef[i].childNodes[3].childNodes[1] !== undefined ? tableRef[i].childNodes[3].childNodes[1].value : ""
+            "column"    : tableRef[i].childNodes[1].childNodes[0].value,
+            "operator"  : tableRef[i].childNodes[2].childNodes[0] !== undefined ? tableRef[i].childNodes[2].childNodes[0].value : "",
+            "value_1"   : tableRef[i].childNodes[3].childNodes[0] !== undefined ? tableRef[i].childNodes[3].childNodes[0].value : "",
+            "value_2"   : tableRef[i].childNodes[3].childNodes[1] !== undefined ? tableRef[i].childNodes[3].childNodes[1].value : ""
         }
-
         tmpArray.push( dataObject );
     }
 
@@ -44,10 +42,10 @@ function confirmFiltration() {
 }
 
 // dodaje nowy wiersz do tabeli
-function addNewRow( event = null, dataObject = null ) 
+function addNewRow( event, dataObject ) 
 {
-    var newCell, newchild;
-    var rowCount = tableRef.rows.length;
+    let newCell, newchild;
+    let rowCount = tableRef.rows.length;
     
     // Insert a row in the table
     var newRow  = tableRef.insertRow(rowCount);
@@ -66,7 +64,7 @@ function addNewRow( event = null, dataObject = null )
     valueCell = newRow.insertCell(3);
 
     // w przypadku gdy oddtwarzam tabele z localStorage 
-    if (dataObject != null ) 
+    if (dataObject !== undefined ) 
     {
         columnValue   = dataObject.column;
         operatorValue = dataObject.operator;
@@ -87,9 +85,12 @@ function addNewRow( event = null, dataObject = null )
 }
 
 // tworzy nowy element typu `type` (text/empty_input/dellButton/columnList/operatorList)
-function createNewElement(type = "text", data = [], operator = ""){
-    var inputID, selectID;
-    switch(type){
+function createNewElement(type, data){
+    let inputID, selectID;
+    data = data || [];
+
+
+    switch(type) {
 
         // button delete
         case "dellButton":
@@ -107,7 +108,8 @@ function createNewElement(type = "text", data = [], operator = ""){
         // implie text imput
         case "text":
             inputID = document.createElement("input");
-            inputID.type = "text";
+            inputID.setAttribute("type", "text");
+            inputID.setAttribute('list', data); // list -> datalist
             return inputID;
         
         // lista kolumn
@@ -116,18 +118,18 @@ function createNewElement(type = "text", data = [], operator = ""){
             selectID.rodzaj = "column";
 
             // blank option
-            var blank = document.createElement("OPTION");
+            let blank = document.createElement("OPTION");
             blank.disabled = "disabled";
             blank.selected = "selected";
             blank.text     = " -- wybierz kolumne -- ";
             selectID.appendChild( blank );
 
             for( let key in data ) {
-                var object = data[key];
-                let x = document.createElement("OPTION");
-                x.value = key;
-                x.text = object.text;
-                selectID.appendChild( x );
+                let object = data[key];
+                let option = document.createElement("OPTION");
+                option.value = key;
+                option.text = object.text;
+                selectID.appendChild( option );
             }
             return selectID;
 
@@ -136,12 +138,12 @@ function createNewElement(type = "text", data = [], operator = ""){
         case "operatorList":
             selectID = document.createElement("select");
             for( let elem in data ) {
-                let x = document.createElement("OPTION");
-                x.value =  data[elem];
-                x.text = operatorsList[ data[elem] ];
-                selectID.appendChild( x );
+                let option = document.createElement("OPTION");
+                option.value =  data[elem];
+                option.text = operatorsList[ data[elem] ];
+                selectID.appendChild( option );
             }
-            return selectID; 
+            return selectID;
         
 
         // lista dla skrytek: jako data tablica {"key1": [val1, val2], "key2":[...]
@@ -150,10 +152,10 @@ function createNewElement(type = "text", data = [], operator = ""){
 
             for( let key in data) {
                 for ( let value in data[key]) {                        
-                    let x = document.createElement("OPTION");
-                    x.value =  key;
-                    x.text = `${key} / ${data[key][value]}`;
-                    selectID.appendChild( x );
+                    let option = document.createElement("OPTION");
+                    option.value = key + '/'+ data[key][value];
+                    option.text = key + '/'+ data[key][value];
+                    selectID.appendChild( option );
                 }
             }
             return selectID; 
@@ -162,12 +164,11 @@ function createNewElement(type = "text", data = [], operator = ""){
         // lista prosta: jako data tablica ["val1, val2"]
         case "list":
             selectID = document.createElement("select");
-            // selectID.name = "wartosc[]";
             for( let elem in data ) {
-                let x = document.createElement("OPTION");
-                x.value = data[elem];
-                x.text = data[elem];
-                selectID.appendChild( x );
+                let option = document.createElement("OPTION");
+                option.value = data[elem];
+                option.text = data[elem];
+                selectID.appendChild( option );
             }
             return selectID; 
         
@@ -175,27 +176,26 @@ function createNewElement(type = "text", data = [], operator = ""){
         // dla pola typu data
         case "date":
             inputID = document.createElement("input");
-            inputID.name = "wartosc[]";
-            inputID.type = "date";
+            inputID.setAttribute("type", "date");
             return inputID;
     }
 }
 
 // tworzy liste dla typu operator
-function createNewOperatorList(columnValue = "", value = "") {
+function createNewOperatorList(columnValue, value) {
     let newchild = createNewElement( "operatorList",                selectData[columnValue].operators );
-    if (value != "" ) newchild.value = value;
+    if (value !== undefined) newchild.value = value;
     newchild.rodzaj = "operator";
     return newchild;
 }
 
 // tworzy inputy dla wartości
-function createNewValueFields(cell = null, type = "", data = [], operatorValue = "", valueValue_1 = "", valueValue_2 = "" ) {
+function createNewValueFields(cell, type, data, operatorValue, valueValue_1, valueValue_2) {
     let newchild;
 
     // value 1:
     newchild = createNewElement( type, data );
-    if (valueValue_1 != "") newchild.value = valueValue_1;
+    if (valueValue_1 !== undefined) newchild.value = valueValue_1;
     cell.appendChild(newchild);
 
     // value 2:
@@ -205,7 +205,7 @@ function createNewValueFields(cell = null, type = "", data = [], operatorValue =
         } 
         else 
             newchild = createNewElement( "empty_input" );
-    if (valueValue_2 != "") newchild.value = valueValue_2;
+    if (valueValue_2 !== undefined) newchild.value = valueValue_2;
     cell.appendChild(newchild);
 }
 
@@ -213,7 +213,7 @@ function createNewValueFields(cell = null, type = "", data = [], operatorValue =
 function selectOnChange(event) 
 {
     var newChild;
-    if (!event.target.matches('select')) return false;
+    if (!event.target == 'select') return false;
 
     let elem = event.target;
     let cell_1th = elem.parentNode.parentNode.cells.item(1);

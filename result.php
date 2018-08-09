@@ -1,5 +1,6 @@
 <?php
     // exit( "<pre>".print_r($_POST, true)."</pre>" );    
+    if (!isset($_POST["site_current"]) || !isset($_POST["filtering"])) exit("null");
     $site_current = $_POST["site_current"]; // aktualna strona
     $site_count = 10;                         // ilosc stron
     
@@ -22,7 +23,7 @@
                 <td>{$filtering -> value_2}</td>
             </tr>";
     }, $_POST["filtering"])) . "
-    </table>" : "";
+    </table>" : "{}";
 
     // zwracana tablica
     $outp = [

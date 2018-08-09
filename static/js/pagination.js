@@ -1,11 +1,13 @@
-var site_count;
-var site_current = getStorageValue("site_current");
-var pagination = document.querySelector("#pagination");
+let siteCount;
+let siteCurrent = getStorageValue("site_current");
+let pagination = document.querySelector("#pagination");
 
 function paginDraw() {
 
+    if (pagination == null || siteCount == 0) return;
+
     // first - prev
-    var paginList = 
+    let paginList = 
     [
         {
             "img" : "static/img/page-first.gif",
@@ -18,13 +20,13 @@ function paginDraw() {
     ];
 
     // bloczki z cyferkami xd
-    let c = Math.min( 5, site_count); // ilosc wyswietlanych bloczkow
-    let p = Math.min(Math.max(site_current - ((c-1)/2), 1), site_count - (c-1)); // licz ktory numer wyswietlony jako pierwszy
+    let c = Math.min( 5, siteCount); // ilosc wyswietlanych bloczkow
+    let p = Math.min(Math.max(siteCurrent - ((c-1)/2), 1), siteCount - (c-1)); // licz ktory numer wyswietlony jako pierwszy
     for (let i = p; i < p + c; i ++){
         paginList.push(
             { 
                 "etykieta" : i,
-                "function" : `paginGoto(${i})`
+                "function" : "paginGoto(" + i + ")"
             }
         );
     }
@@ -40,41 +42,40 @@ function paginDraw() {
         });
     
     // rysuj wszystkie bloczki
-    pagination.innerHTML = paginList.map( (i, index) => {
-        return `
-        <li>
-            <a ${( i.etykieta == site_current ) ? "class='active'" : "nie"} onclick="${i.function}">
-                ${ (i.etykieta) ? i.etykieta : "<img src='"+i.img+"'/>" }
-            </a>
-        </li>`;
+    pagination.innerHTML = paginList.map( function(i, index) {
+        return "<li>"+
+            "<a " + (( i.etykieta == siteCurrent ) ? "class='active'" : "nie" ) + " onclick='" + i.function + "'>" + 
+                ((i.etykieta) ? i.etykieta : "<img src='"+i.img+"'/>" ) + 
+            "</a>" + 
+        "</li>";
     }).join('');
 }
 
 function paginGoto(no) {
-    site_current = no;
+    siteCurrent = no;
     paginChanged();
 }
 function paginFirst() {
-    site_current = 1;
+    siteCurrent = 1;
     paginChanged();
 }
 function paginLast() {
-    site_current = site_count;
+    siteCurrent = siteCount;
     paginChanged();
 }
 function paginNext() {
-    if ( site_current < site_count ) site_current++;
+    if ( siteCurrent < siteCount ) siteCurrent++;
     paginChanged();
 }
 function paginPrev() {
-    if ( site_current > 1 ) site_current--;
+    if ( siteCurrent > 1 ) siteCurrent--;
     paginChanged();
 }
 
 function paginChanged()
 {
     // zapamiętaj Stronę
-    updateStorageValue("site_current", site_current);
+    updateStorageValue("site_current", siteCurrent);
 
     // odswież pagination bar
     paginDraw();

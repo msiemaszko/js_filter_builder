@@ -1,51 +1,54 @@
 // skrypt php
-var php_action = "result.php";
+var phpAction = "result.php";
 
 // na podstawie danych localStorage wysyła zapytanie HttpRequest
 function sendHttpRequest()
 {
-    let lista = getStorageList("data_filter");
-    let formdata = new FormData();
+    let list = getStorageList("data_filter");
+    let formData = new FormData();
 
     // przygotowanie danych formularza POST
-    for ( let x in lista ) {
-        formdata.append("filtering[]", JSON.stringify({
-            "column":   lista[x].column,
-            "operator": lista[x].operator,
-            "value_1":  lista[x].value_1,
-            "value_2":  lista[x].value_2,
+    for ( let x in list ) {
+        formData.append("filtering[]", JSON.stringify({
+            "column":   list[x].column,
+            "operator": list[x].operator,
+            "value_1":  list[x].value_1,
+            "value_2":  list[x].value_2,
         }))
     }
 
     // dorzuca dane o stronie
-    formdata.append("site_current", site_current);
+    if (siteCurrent !== undefined)
+        formData.append("site_current", siteCurrent);
 
     // obiekt xml-http
-    let xmlhttp;
+    let xmlHttp;
     if(window.XMLHttpRequest) {
-        xmlhttp = new XMLHttpRequest;
+        xmlHttp = new XMLHttpRequest;
     } else {
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
     }
 
     // akcja przy odebraniu danych
-    xmlhttp.onreadystatechange = function() {
-        if( xmlhttp.readyState == 4 && xmlhttp.status == 200 ) {
-
-            // console.log(xmlhttp.responseText);
-            // result.innerHTML = xmlhttp.responseText;
+    xmlHttp.onreadystatechange = function() {
+        if( xmlHttp.readyState == 4 && xmlHttp.status == 200 ) {
             
-            let myObj = JSON.parse(xmlhttp.responseText);
-            // console.log(myObj);
-            result.innerHTML = myObj.html_result;
-            site_count = myObj.site_count;
-            site_current = myObj.site_current;
-            result.innerHTML += `<div>site: ${site_current} / ${site_count}</div>`;
-            paginDraw();
+            let myObj = JSON.parse(xmlHttp.responseText);
+            if (myObj != null ) {
+                siteCount = myObj.site_count;
+                siteCurrent = myObj.site_current;
+                if (result) {
+                    result.innerHTML = myObj.html_result;
+                    result.innerHTML += "<div>site: " + siteCurrent + " / " + siteCount + "</div>";
+                }
+                paginDraw();
+            }
+            else 
+            if (result) result.innerHTML = "";
         }
     }
 
     // wysłanie zapytania
-    xmlhttp.open("POST", php_action);
-    xmlhttp.send(formdata);
+    xmlHttp.open("POST", phpAction);
+    xmlHttp.send(formData);
 }
