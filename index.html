@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="static/style/filterTable.css">
     <link rel="stylesheet" href="static/style/pagination.css">
 </head>
-<body><center>
-
+<body>
+    
     <div id="filterTable">
         <p>JS Filter Builder</p>
         <table>
@@ -48,12 +48,15 @@
         <ul id="pagination" class="pagination"></ul>
     </div>
         
-
-</center></body>
+</body>
 </html>
     
 <!-- input data -->
 <script>
+    
+    // skrypt php
+    var phpAction = "result.php";
+
     // values for the column `skrytka`
     let datalist_skrytki = {
         "domyslny": [

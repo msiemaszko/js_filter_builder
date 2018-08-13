@@ -18,6 +18,9 @@ The results are collected in real time. The filtering criteria are stored in the
 #### defining the dictionary :
 ```html
 <script>
+    // skrypt php
+    var phpAction = "result.php";
+
     // values for the column `skrytka`
     let datalist_skrytki = {
         "domyslny": [

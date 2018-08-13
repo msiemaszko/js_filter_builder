@@ -1,5 +1,5 @@
 // skrypt php
-var phpAction = "result.php";
+// var phpAction = "result.php";
 
 // na podstawie danych localStorage wysyła zapytanie HttpRequest
 function sendHttpRequest()
@@ -33,8 +33,8 @@ function sendHttpRequest()
     xmlHttp.onreadystatechange = function() {
         if( xmlHttp.readyState == 4 && xmlHttp.status == 200 ) {
             
-            let myObj = JSON.parse(xmlHttp.responseText);
-            if (myObj != null ) {
+            try {
+                let myObj = JSON.parse(xmlHttp.responseText);
                 siteCount = myObj.site_count;
                 siteCurrent = myObj.site_current;
                 if (result) {
@@ -42,9 +42,11 @@ function sendHttpRequest()
                     result.innerHTML += "<div>site: " + siteCurrent + " / " + siteCount + "</div>";
                 }
                 paginDraw();
+
+            } catch(error) {
+                console.log( "JSON parse error: " + error );
+                if (result) result.innerHTML = xmlHttp.responseText;
             }
-            else 
-            if (result) result.innerHTML = "";
         }
     }
 
